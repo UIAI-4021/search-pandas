@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 class Flight:
     def __init__(self , Airline , SourceAirport , DestinationAirport\
                  , SourceAirport_City , SourceAirport_Country , SourceAirport_Latitude\
@@ -20,9 +23,6 @@ class Flight:
         self.Distance = Distance
         self.FlyTime = FlyTime
         self.Price = Price
-
-
-
 
 
 
