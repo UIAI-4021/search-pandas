@@ -1,3 +1,5 @@
+import pandas
+
 import MySetting as ms
 ms.MySetting.print_animated('Welcome to our app')
 
