@@ -6,7 +6,7 @@ class Graph :
     _instance = None
     edges : set
     vertices : set
-
+    #first we append all our vertices in the graph
     def __init__(self):
         # self.edges = list()
         # self.vertices = list()
@@ -25,9 +25,26 @@ class Graph :
         return cls._instance
 
 
+    def get_vertex(self , name):
+        for vertex in self.vertices :
+            if isinstance(vertex , VertexClass) and vertex.name == name:
+                return vertex
+        return None
     def add_vertex(self , new_vertex):
         self.vertices.append(new_vertex)
 
+    def get_edge(self , starting : VertexClass , ending : VertexClass):
+        try:
+            if starting.connected_vertices.keys().__contains__(ending):
+                return starting.connected_vertices[ending]
+        except Exception :
+            return None
+
     def add_edge(self ,starting : VertexClass, ending : VertexClass):
-        new_edge = EdgeClass(starting , ending , 0)
+        if self.get_edge(starting , ending) is None:
+            edge = EdgeClass(starting , ending)
+            starting.connected_vertices[ending] = edge
+            ending.connected_vertices[starting] = edge
+            self.edges.add(edge)
+
 
