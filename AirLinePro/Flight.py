@@ -6,7 +6,7 @@ class Flight:
                  , SourceAirport_City , SourceAirport_Country , SourceAirport_Latitude\
                  , SourceAirport_Longitude , SourceAirport_Altitude , DestinationAirport_City\
                  , DestinationAirport_Country, DestinationAirport_Latitude , DestinationAirport_Longitude\
-                 , DestinationAirport_Altitude , Distance , FlyTime , Price):
+                 , DestinationAirport_Altitude , Distance , FlyTime , Price , cost):
         self.Airline = Airline
         self.SourceAirport = SourceAirport
         self.DestinationAirport = DestinationAirport
@@ -23,7 +23,7 @@ class Flight:
         self.Distance = Distance
         self.FlyTime = FlyTime
         self.Price = Price
-
+        self.cost = cost
 
 
 
