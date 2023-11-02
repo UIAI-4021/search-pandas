@@ -9,15 +9,17 @@ class Heap:
         key: int
         value: Flight
 
+
         def __init__(self, key, value):
             self.key = key
             self.value = value
 
-    def parent(self, j): return (j-1)/2
+    def parent(self, j): return int((j-1)/2)
     def left(self, j): return 2*j+1
     def right(self, j): return 2*j+2
     def hasLeft(self, j): return self.left(j) < len(self.heap)
     def hasRight(self, j): return self.right(j) < len(self.heap)
+
 
 
     def swap(self , i, j):
@@ -42,7 +44,7 @@ class Heap:
 
             if self.hasRight(j) :
                 right_index = self.right(j)
-                if self.heap[left_index].key > self.heap[right_index]:
+                if self.heap[left_index].key > self.heap[right_index].key:
                     small_child_index = right_index
 
             if self.heap[small_child_index].key >= self.heap[j].key: break
@@ -57,7 +59,7 @@ class Heap:
         answer = self.heap[0]
 
         self.swap(0, len(self.heap)-1)
-        self.heap.remove(len(self.heap)-1)
+        self.heap.pop()
         self.downHeap(0)
 
         return answer
