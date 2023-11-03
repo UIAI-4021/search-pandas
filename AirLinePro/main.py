@@ -55,7 +55,32 @@ print()
 #
 #
 #
-def dijkstra (graph : Graph , destination: VertexClass , origin: VertexClass):
+
+
+graph = Graph.getInstance()
+V1 = VertexClass('A')
+V2 = VertexClass('B')
+V3 = VertexClass('C')
+V4 = VertexClass('D')
+V5 = VertexClass('E')
+V6 = VertexClass('F')
+graph.add_vertex(V1)
+graph.add_vertex(V2)
+graph.add_vertex(V3)
+graph.add_vertex(V4)
+graph.add_vertex(V5)
+graph.add_vertex(V6)
+graph.add_edge(V1 , V2 , 10)
+graph.add_edge(V1 , V3 , 15)
+graph.add_edge(V2 , V4 , 12)
+graph.add_edge(V2 , V6 , 15)
+graph.add_edge(V4 , V6 , 1)
+graph.add_edge(V6 , V5 , 5)
+graph.add_edge(V4 , V5 , 2)
+graph.add_edge(V3 , V5 , 10)
+
+
+def dijkstra (graph : Graph , origin: VertexClass, destination: VertexClass):
 
     visited_graph = set()
 
@@ -92,3 +117,9 @@ def dijkstra (graph : Graph , destination: VertexClass , origin: VertexClass):
                     if name == item.name:
                         continue
             heap.inster(item.cost + next_path.key, next_path.path)
+    return None
+
+
+
+e = dijkstra(graph , V1 , V5)
+print()

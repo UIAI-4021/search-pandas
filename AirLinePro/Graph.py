@@ -41,7 +41,7 @@ class Graph :
                 return edge
         return None
 
-    def add_edge(self ,starting : VertexClass, ending : VertexClass , cost = 0):
+    def add_edge(self ,starting : VertexClass, ending : VertexClass , cost):
         if self.get_edge(starting , ending) is None:
             edge = EdgeClass(starting, ending, cost)
             starting.add_ending(ending , edge)
