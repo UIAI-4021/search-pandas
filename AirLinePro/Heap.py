@@ -1,18 +1,22 @@
 from Flight import Flight
 
+
+class Entry:
+    key: int
+    path: list
+    flight_info: Flight
+
+    def __init__(self, key, value1, value2):
+        self.key = key
+        self.path = value1
+        self.flight_info = value2
+
+
 class Heap:
 
     def __init__(self) :
         self.heap = list()
 
-    class Entry:
-        key: int
-        value: Flight
-
-
-        def __init__(self, key, value):
-            self.key = key
-            self.value = value
 
     def parent(self, j): return int((j-1)/2)
     def left(self, j): return 2*j+1
@@ -65,13 +69,12 @@ class Heap:
         return answer
 
 
-    def inster(self , key, value: Flight):
-        newest = self.Entry(key, value)
+    def inster(self , key, value1: list, value2: Flight):
+        newest = Entry(key, value1, value2)
         self.heap.append(newest)
         self.upHeap(len(self.heap)-1)
 
         return newest
-
 
 
 
