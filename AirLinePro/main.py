@@ -88,6 +88,8 @@ def dijkstra (graph : Graph , origin: VertexClass, destination: VertexClass):
     while len(visited_graph) != len(graph.vertices):
         next_path = heap.remove_min()
 
+        if next_path.flight_info.name == destination.name:
+            return next_path
 
         last_path = None
 
@@ -110,8 +112,7 @@ def dijkstra (graph : Graph , origin: VertexClass, destination: VertexClass):
         # next_path.path.append(next_path.flight_info)
         # updated_path = next_path.path
 
-        if next_path.flight_info.name == destination:
-            return next_path
+
 
         for item in vertex.endings:
             if isinstance(item, VertexClass):
