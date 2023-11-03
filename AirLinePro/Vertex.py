@@ -1,6 +1,6 @@
 class VertexClass:
 
-    def __init__(self,name):
+    def __init__(self, name):
         self.name = name
         self.startings = dict()
         self.endings = dict()

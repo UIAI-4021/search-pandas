@@ -2,11 +2,11 @@ from Vertex import VertexClass
 from Edge import EdgeClass
 class Graph :
 
-    #singleTon graph
+    # singleTon graph
     _instance = None
     edges : set
     vertices : set
-    #first we append all our vertices in the graph
+    # first we append all our vertices in the graph
     def __init__(self):
 
         raise RuntimeError('Call instance() instead')
