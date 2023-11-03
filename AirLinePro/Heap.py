@@ -1,10 +1,10 @@
 from Flight import Flight
-
+from Vertex import VertexClass
 
 class Entry:
     key: int
     path: list
-    flight_info: Flight
+    flight_info: VertexClass
 
     def __init__(self, key, value1, value2):
         self.key = key
@@ -69,7 +69,7 @@ class Heap:
         return answer
 
 
-    def inster(self , key, value1: list, value2: Flight):
+    def inster(self , key, value1: list, value2: VertexClass):
         newest = Entry(key, value1, value2)
         self.heap.append(newest)
         self.upHeap(len(self.heap)-1)
