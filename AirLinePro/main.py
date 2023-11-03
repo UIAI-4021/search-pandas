@@ -87,7 +87,7 @@ def dijkstra (graph : Graph , origin: VertexClass, destination: VertexClass):
     # making our heap and adding the origin as the starting point of the dijkstra
     root_value = [origin]
     heap = Heap()
-    heap.inster(0, root_value)
+    heap.inster(0, root_value, origin)
 
     while len(visited_graph) != len(graph.vertices):
         next_path = heap.remove_min()
@@ -97,17 +97,17 @@ def dijkstra (graph : Graph , origin: VertexClass, destination: VertexClass):
 
         if isinstance(next_path, Entry): # we want to expand the last destination we had
             last_path = next_path.flight_info
-            visited_graph.add(next_path.flight_info.DestinationAirport)
+            visited_graph.add(next_path.flight_info.name)
 
         vertex = None
         for item in graph.vertices:
-            if item.name == last_path.DestinationAirport:
+            if item.name == last_path.name:
                 vertex = item
 
         # finding the next destinations that we can go using this last path that we went
-        next_path.value.append(next_path)
+        updated_path = next_path.path.append(next_path)
 
-        if next_path.flight_info.DestinationAirport == destination:
+        if next_path.flight_info.name == destination:
             return next_path
 
         for item in vertex.startings:
@@ -116,7 +116,7 @@ def dijkstra (graph : Graph , origin: VertexClass, destination: VertexClass):
                 for name in visited_graph:
                     if name == item.name:
                         continue
-            heap.inster(item.cost + next_path.key, next_path.path)
+            heap.inster(item.cost + next_path.key, updated_path)
     return None
 
 
