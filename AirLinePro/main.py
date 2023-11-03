@@ -3,6 +3,9 @@ from Flight import Flight
 from Vertex import VertexClass
 from Graph import Graph
 from Edge import EdgeClass
+from Heap import Heap
+from Heap import Entry
+
 df = pd.read_csv('../assets/files/Flight_Data_Reduced.csv')
 
 def set_data(records):
@@ -52,4 +55,41 @@ print(max)
 #
 #
 #
+def dijkstra (graph : Graph , destination: VertexClass , origin: VertexClass):
+
+    visited_graph = set()
+
+    # making our heap and adding the origin as the starting point of the dijkstra
+    root_value = [origin]
+    heap = Heap()
+    heap.inster(0, root_value)
+
+    while len(visited_graph) != len(graph.vertices):
+        next_path = heap.remove_min()
+
+
+        last_path = None
+
+        if isinstance(next_path, Entry): # we want to expand the last destination we had
+            last_path = next_path.flight_info
+            visited_graph.add(next_path.flight_info.DestinationAirport)
+
+        vertex = None
+        for item in graph.vertices:
+            if item.name == last_path.DestinationAirport:
+                vertex = item
+
+        # finding the next destinations that we can go using this last path that we went
+        next_path.value.append(next_path)
+
+        for item in vertex.connected_vertices:
+
+
+            if isinstance(item, VertexClass):
+                for name in visited_graph:
+                    if name == item.name:
+                        continue
+            heap.inster(item.cost + next_path.key, next_path.path)
+
+
 
