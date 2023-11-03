@@ -44,8 +44,8 @@ class Graph :
     def add_edge(self ,starting : VertexClass, ending : VertexClass , cost = 0):
         if self.get_edge(starting , ending) is None:
             edge = EdgeClass(starting, ending, cost)
-            starting.connected_vertices[ending] = edge
-            ending.connected_vertices[starting] = edge
+            starting.add_ending(ending , edge)
+            ending.add_starting(starting , edge)
             self.edges.add(edge)
 
 

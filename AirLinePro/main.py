@@ -22,7 +22,7 @@ def set_data(records):
                , record['SourceAirport_Altitude'] ,record['DestinationAirport_City']
                ,record['DestinationAirport_Country'] ,record['DestinationAirport_Latitude']
                ,record['DestinationAirport_Longitude'] ,record['DestinationAirport_Altitude']
-               ,record['Distance'] ,record['FlyTime'] ,record['Price'] ,0)
+               ,record['Distance'] ,record['FlyTime'] ,record['Price'] ,cost)
 
         flights.append(f)
     return flights
@@ -30,11 +30,11 @@ def set_data(records):
 
 
 flights = set_data(df)
-max = 0
-for i in flights:
-    if i.FlyTime > max:
-        max = i.FlyTime
-print(max)
+i = 1
+for flight in flights:
+    print(f'price: {flight.Price} ,FlyTime: {flight.FlyTime} ,Distance: {flight.Distance} , cost: {flight.cost}  ')
+    i +=1
+print()
 #
 #
 # graph = Graph.getInstance()
@@ -48,8 +48,8 @@ print(max)
 #     starting = graph.get_vertex(str(record['SourceAirport']))
 #     ending = graph.get_vertex(str(record['DestinationAirport']))
 #     last_edge = graph.get_edge(starting , ending)
-#     if last_edge is None or last_edge.cost > record['Price']:
-#         graph.add_edge(starting , ending , cost=record['Price'])
+#     if last_edge is None or last_edge.cost > record['cost']:
+#         graph.add_edge(starting , ending , cost=record['cost'])
 # print()
 #
 #
