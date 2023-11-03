@@ -82,14 +82,13 @@ def dijkstra (graph : Graph , destination: VertexClass , origin: VertexClass):
         # finding the next destinations that we can go using this last path that we went
         next_path.value.append(next_path)
 
-        for item in vertex.connected_vertices:
+        if next_path.flight_info.DestinationAirport == destination:
+            return next_path
 
-
+        for item in vertex.startings:
             if isinstance(item, VertexClass):
+                # already has been checked
                 for name in visited_graph:
                     if name == item.name:
                         continue
             heap.inster(item.cost + next_path.key, next_path.path)
-
-
-
