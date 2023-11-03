@@ -30,11 +30,7 @@ def set_data(records):
 
 
 flights = set_data(df)
-i = 1
-for flight in flights:
-    print(f'price: {flight.Price} ,FlyTime: {flight.FlyTime} ,Distance: {flight.Distance} , cost: {flight.cost}  ')
-    i +=1
-print()
+
 #
 #
 # graph = Graph.getInstance()
@@ -85,7 +81,7 @@ def dijkstra (graph : Graph , origin: VertexClass, destination: VertexClass):
     visited_graph = set()
 
     # making our heap and adding the origin as the starting point of the dijkstra
-    root_value = [origin]
+    root_value = []
     heap = Heap()
     heap.inster(0, root_value, origin)
 
@@ -103,20 +99,29 @@ def dijkstra (graph : Graph , origin: VertexClass, destination: VertexClass):
         for item in graph.vertices:
             if item.name == last_path.name:
                 vertex = item
+                break
 
         # finding the next destinations that we can go using this last path that we went
-        updated_path = next_path.path.append(next_path)
+        updated_path = list()
+        for i in next_path.path:
+            updated_path.append(i)
+        updated_path.append(vertex)
+
+        # next_path.path.append(next_path.flight_info)
+        # updated_path = next_path.path
 
         if next_path.flight_info.name == destination:
             return next_path
 
-        for item in vertex.startings:
+        for item in vertex.endings:
             if isinstance(item, VertexClass):
                 # already has been checked
                 for name in visited_graph:
                     if name == item.name:
                         continue
-            heap.inster(item.cost + next_path.key, updated_path)
+            e = vertex.endings[item]
+            heap.inster(e.cost + next_path.key, updated_path, item)
+
     return None
 
 
