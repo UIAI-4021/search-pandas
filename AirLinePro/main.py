@@ -5,6 +5,10 @@ from Graph import Graph
 from Edge import EdgeClass
 from Heap import Heap
 from Heap import Entry
+import time
+
+
+start_time = time.time()
 
 df = pd.read_csv('../assets/files/Flight_Data_Reduced.csv')
 
@@ -33,26 +37,24 @@ flights = set_data(df)
 
 #
 #
-# graph = Graph.getInstance()
-# for flight in flights:
-#     if graph.get_vertex(flight.SourceAirport) is None:
-#         graph.add_vertex(VertexClass(flight.SourceAirport))
-#     if graph.get_vertex(flight.DestinationAirport) is None:
-#         graph.add_vertex(VertexClass(flight.DestinationAirport))
-#
-# for i , record in df.iterrows():
-#     starting = graph.get_vertex(str(record['SourceAirport']))
-#     ending = graph.get_vertex(str(record['DestinationAirport']))
-#     last_edge = graph.get_edge(starting , ending)
-#     if last_edge is None or last_edge.cost > record['cost']:
-#         graph.add_edge(starting , ending , cost=record['cost'])
-# print()
-#
-#
-#
-#
+graph = Graph.getInstance()
+for flight in flights:
+    if graph.get_vertex(flight.SourceAirport) is None:
+        graph.add_vertex(VertexClass(flight.SourceAirport))
+    if graph.get_vertex(flight.DestinationAirport) is None:
+        graph.add_vertex(VertexClass(flight.DestinationAirport))
 
+for flight in flights:
+    starting = graph.get_vertex(str(flight.SourceAirport))
+    ending = graph.get_vertex(str(flight.DestinationAirport))
+    last_edge = graph.get_edge(starting , ending)
+    if last_edge is None or last_edge.cost > flight.cost:
+        graph.add_edge(starting , ending , cost=flight.cost)
 
+graph_time = time.time()
+print('graph is done!')
+# print(graph.get_vertex('Imam Khomeini International Airport') , graph.get_vertex('Raleigh Durham International Airport'))
+#===================================> TEST GRAPH
 graph = Graph.getInstance()
 V1 = VertexClass('A')
 V2 = VertexClass('B')
@@ -73,7 +75,7 @@ graph.add_edge(V2 , V6 , 15)
 graph.add_edge(V4 , V6 , 1)
 graph.add_edge(V6 , V5 , 5)
 graph.add_edge(V4 , V5 , 2)
-graph.add_edge(V3 , V5 , 10)
+# graph.add_edge(V3 , V5 , 10)
 
 
 def dijkstra (graph : Graph , origin: VertexClass, destination: VertexClass):
@@ -89,6 +91,7 @@ def dijkstra (graph : Graph , origin: VertexClass, destination: VertexClass):
         next_path = heap.remove_min()
 
         if next_path.flight_info.name == destination.name:
+            next_path.path.append(next_path.flight_info)
             return next_path
 
         last_path = None
@@ -115,11 +118,16 @@ def dijkstra (graph : Graph , origin: VertexClass, destination: VertexClass):
 
 
         for item in vertex.endings:
+            flag = False
             if isinstance(item, VertexClass):
                 # already has been checked
                 for name in visited_graph:
-                    if name == item.name:
-                        continue
+                    if item.name == name:
+                        flag = True
+                        break
+                if flag:
+                    continue
+
             e = vertex.endings[item]
             heap.inster(e.cost + next_path.key, updated_path, item)
 
@@ -127,5 +135,17 @@ def dijkstra (graph : Graph , origin: VertexClass, destination: VertexClass):
 
 
 
-e = dijkstra(graph , V1 , V5)
-print()
+e = dijkstra(graph , graph.get_vertex('Imam Khomeini International Airport') , graph.get_vertex('Raleigh Durham International Airport'))
+# e = dijkstra(graph , V1,V5)
+
+f = open('./tmp.txt' , 'w' , encoding="utf-8")
+
+i = 1
+if isinstance(e , Entry):
+    for item in e.path:
+        print(f'{i} : {item.name}')
+        f.write(f'{i} : {item.name}\n')
+        i+=1
+
+end_time = time.time()
+f.write(f'graph time: {graph_time - start_time} \n execution time: {end_time - start_time}\n')
