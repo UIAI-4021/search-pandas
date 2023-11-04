@@ -41,11 +41,10 @@ Notes:
 
 # region  Libraries
 # ==========================
-from Flight import Flight
-from Vertex import VertexClass
 from Graph import Graph
 from Heap import Entry
 import time
+import sys
 # endregion
 
 start_time = time.time()    #To measure the execution time
@@ -58,13 +57,33 @@ graph_time = time.time()    #temp
 # endregion
 
 # region Getting The input
-
 # ==========================
+try:
+    if len(sys.argv) < 2:
+        raise ValueError("Usage: python best-flight.py \"Source Airport - Destination Airport\"")
+    input = sys.argv[1].strip('"')  # ---> The inputs should be given by calling the script best-flight and inputs
+    #     Usage: python best-flight.py input1 - input2
+
+    src = input.split(' - ')[0]
+    dst = input.split(' - ')[1]
+
+    source_vertex = graph.get_vertex(src)
+    destination_vertex = graph.get_vertex(dst)
+
+    if source_vertex is None or destination_vertex is None:
+        raise ValueError('The Source Airport or Destination Airport does not exist')
+
+except ValueError as e:
+    print('\nError:' , e)
+    exit()
 
 # endregion
 
-e = graph.dijkstra(graph.get_vertex('Imam Khomeini International Airport'),
-                   graph.get_vertex('Raleigh Durham International Airport'))
+# e = graph.dijkstra(graph.get_vertex('Imam Khomeini International Airport'),
+#                    graph.get_vertex('Raleigh Durham International Airport'))
+
+# noinspection PyUnboundLocalVariable
+e = graph.dijkstra(source_vertex, destination_vertex)
 
 f = open('./tmp.txt', 'w', encoding="utf-8")
 
