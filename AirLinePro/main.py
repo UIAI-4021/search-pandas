@@ -48,7 +48,6 @@ import time
 import sys
 # endregion
 
-start_time = time.time()    #To measure the execution time
 
 # region Forming the Graph
 # ==========================
@@ -80,21 +79,30 @@ except ValueError as e:
 
 # endregion
 
-# e = graph.dijkstra(graph.get_vertex('Imam Khomeini International Airport'),
-#                    graph.get_vertex('Raleigh Durham International Airport'))
+dijkstra_start_time = time.time()    #To measure the execution time
 
-# noinspection PyUnboundLocalVariable
-e = graph.dijkstra(source_vertex, destination_vertex)
-end_time = time.time()
+dijkstra_entry = graph.dijkstra(graph.get_vertex('Imam Khomeini International Airport'),
+                   graph.get_vertex('Raleigh Durham International Airport'))
+# e = graph.dijkstra(source_vertex, destination_vertex)
+dijkstra_end_time = time.time()
 
-# region Print Result
+
+a_star_start_time = time.time()    #To measure the execution time
+
+a_star_entry = graph.a_star(graph.get_vertex('Imam Khomeini International Airport'),
+                            graph.get_vertex('Raleigh Durham International Airport'))
+# a_star_entry = graph.dijkstra(source_vertex, destination_vertex)
+a_star_end_time = time.time()
+
+
+# region Print dijkstra
 
 if not os.path.exists('../output'):
     os.mkdir('../output')
-file = open('../output/Dijkstra Algorithm.txt', 'w', encoding="utf-8")
+file = open('../output/Dijkstra-Algorithm.txt', 'w', encoding="utf-8")
 
 
-execution_time = end_time - start_time
+dijkstra_execution_time = round(dijkstra_end_time - dijkstra_start_time,3)
 
 total_price = 0
 total_duration = 0
@@ -105,19 +113,19 @@ file.write('#############\n')
 
 print('Dijkstra Algorithm')
 file.write('Dijkstra Algorithm\n')
-if execution_time >= 60:
-    print(f'Execution Time: {round(execution_time/60, 3)}min{round(execution_time%60, 3)}s')
-    file.write(f'Execution Time: {round(execution_time/60, 3)}min{round(execution_time%60, 3)}s\n')
+if dijkstra_execution_time >= 60:
+    print(f'Execution Time: {round(dijkstra_execution_time / 60, 3)}min{round(dijkstra_execution_time % 60, 3)}s')
+    file.write(f'Execution Time: {round(dijkstra_execution_time / 60, 3)}min{round(dijkstra_execution_time % 60, 3)}s\n')
 else:
-    print(f'Execution Time: {round(execution_time, 3)}s')
-    file.write(f'Execution Time: {round(execution_time, 3)}s\n')
+    print(f'Execution Time: {round(dijkstra_execution_time, 3)}s')
+    file.write(f'Execution Time: {round(dijkstra_execution_time, 3)}s\n')
 print('.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
 file.write('.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n')
 
-if isinstance(e , Entry):
-    for i in range(0 , len(e.path) - 1):
-        src = graph.get_vertex(e.path[i].name)
-        dst = graph.get_vertex(e.path[i + 1].name)
+if isinstance(dijkstra_entry , Entry):
+    for i in range(0 , len(dijkstra_entry.path) - 1):
+        src = graph.get_vertex(dijkstra_entry.path[i].name)
+        dst = graph.get_vertex(dijkstra_entry.path[i + 1].name)
         path = graph.get_edge(src , dst)
 
         print(f'Flight #{i+1}:')
@@ -157,4 +165,81 @@ else:
     print(f'Total Time: {int(total_time)}h {round((total_time - int(total_time)) * 60)}min')
     file.write(f'Total Time: {int(total_time)}h {round((total_time - int(total_time)) * 60)}min\n')
 
+file.close()
 # endregion
+
+# ==========================
+
+# region Print A*
+
+if not os.path.exists('../output'):
+    os.mkdir('../output')
+file = open('../output/A-Star-Algorithm.txt', 'w', encoding="utf-8")
+
+
+a_star_execution_time = round(a_star_end_time - a_star_start_time, 3)
+
+total_price = 0
+total_duration = 0
+total_time = 0
+
+print('\n#############') #result Seprator
+file.write('#############\n')
+
+print('A* Algorithm')
+file.write('A* Algorithm\n')
+if a_star_execution_time >= 60:
+    print(f'Execution Time: {round(a_star_execution_time / 60, 3)}min{round(a_star_execution_time % 60, 3)}s')
+    file.write(f'Execution Time: {round(a_star_execution_time / 60, 3)}min{round(a_star_execution_time % 60, 3)}s\n')
+else:
+    print(f'Execution Time: {round(a_star_execution_time, 3)}s')
+    file.write(f'Execution Time: {round(a_star_execution_time, 3)}s\n')
+print('.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
+file.write('.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n')
+
+if isinstance(a_star_entry, Entry):
+    for i in range(0 , len(a_star_entry.path) - 1):
+        src = graph.get_vertex(a_star_entry.path[i].name)
+        dst = graph.get_vertex(a_star_entry.path[i + 1].name)
+        path = graph.get_edge(src , dst)
+
+        print(f'Flight #{i+1}:')
+        file.write(f'Flight #{i+1}:\n')
+        print(f'From: {src.name} - {src.city}, {src.country}')
+        file.write(f'From: {src.name} - {src.city}, {src.country}\n')
+        print(f'To: {dst.name} - {dst.city}, {dst.country}')
+        file.write(f'To: {dst.name} - {dst.city}, {dst.country}\n')
+        print(f'Duration: {round(path.duration, 3)}km')
+        file.write(f'Duration: {round(path.duration, 3)}km\n')
+        time = path.time
+
+        if path.time < 1:
+            print(f'Time: {round(path.time * 60)}min')
+            file.write(f'Time: {round(path.time * 60)}min\n')
+        else:
+            print(f'Time: {int(path.time)}h {round((path.time - int(path.time)) * 60)}min')
+            file.write(f'Time: {int(path.time)}h {round((path.time - int(path.time)) * 60)}min\n')
+
+        print(f'Price: {round(path.price, 3)}$')
+        file.write(f'Price: {round(path.price, 3)}$\n')
+        print('----------------------------')
+        file.write('----------------------------\n')
+
+        total_price += path.price
+        total_duration = path.duration
+        total_time = path.time
+
+print(f'Total Price: {total_price}$')
+file.write(f'Total Price: {total_price}$\n')
+print(f'Total Duration: {round(total_duration,3)}km')
+file.write(f'Total Duration: {round(total_duration,3)}km\n')
+if total_time < 1:
+    print(f'Total Time: {round(total_time * 60)}min')
+    file.write(f'Total Time: {round(total_time * 60)}min\n')
+else:
+    print(f'Total Time: {int(total_time)}h {round((total_time - int(total_time)) * 60)}min')
+    file.write(f'Total Time: {int(total_time)}h {round((total_time - int(total_time)) * 60)}min\n')
+
+file.close()
+# endregion
+

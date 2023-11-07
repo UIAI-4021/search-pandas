@@ -1,3 +1,6 @@
+import math
+
+import numpy as np
 from tqdm import tqdm
 
 from Flight import Flight
@@ -57,9 +60,17 @@ class Graph :
         flights = Flight.get_flights()
         for flight in tqdm(flights, desc='Forming the graph'.upper(), unit='vertex'):
             if self.get_vertex(flight.SourceAirport) is None:
-                self.add_vertex(VertexClass(flight.SourceAirport, flight.SourceAirport_City, flight.SourceAirport_Country))
-            if self.get_vertex(flight.DestinationAirport ) is None:
-                self.add_vertex(VertexClass(flight.DestinationAirport, flight.DestinationAirport_City , flight.DestinationAirport_Country))
+                self.add_vertex(VertexClass(name=flight.SourceAirport, city=flight.SourceAirport_City,
+                                            country=flight.SourceAirport_Country,
+                                            x_axis=flight.SourceAirport_Longitude,
+                                            y_axis=flight.SourceAirport_Latitude,
+                                            z_axis=flight.SourceAirport_Altitude))
+            if self.get_vertex(flight.DestinationAirport) is None:
+                self.add_vertex(VertexClass(name=flight.DestinationAirport, city=flight.DestinationAirport_City,
+                                            country=flight.DestinationAirport_Country,
+                                            x_axis=flight.DestinationAirport_Longitude,
+                                            y_axis=flight.DestinationAirport_Latitude,
+                                            z_axis=flight.DestinationAirport_Altitude))
 
             starting = self.get_vertex(str(flight.SourceAirport))
             ending = self.get_vertex(str(flight.DestinationAirport))
@@ -71,7 +82,7 @@ class Graph :
     def dijkstra(self, origin: VertexClass, destination: VertexClass):
 
         total_iterations = len(self.vertices)
-        progress_bar = tqdm(total=total_iterations, desc='finding the best path with the Dijkstra\'s algorithm'.upper(),
+        progress_bar = tqdm(total=total_iterations, desc='Finding The Best Path with the Dijkstra\'s Algorithm'.upper(),
                             unit="Vertex")
 
         visited_graph = set()
@@ -122,6 +133,76 @@ class Graph :
 
                 e = vertex.endings[item]
                 heap.inster(e.cost + next_path.key, updated_path, item)
+            progress_bar.update(1)
+
+        return None
+
+
+    def calculate_heuristic(self, current: VertexClass , destination: VertexClass):
+        current_position_vector = np.array([current.x_axis, current.y_axis, current.z_axis])
+        destinaion_position_vector = np.array([current.x_axis, current.y_axis, current.z_axis])
+
+        current_position_norm = math.sqrt(np.dot(current_position_vector , current_position_vector))
+        destination_position_norm = math.sqrt(np.dot(destinaion_position_vector , destinaion_position_vector))
+
+        return abs(current_position_norm - destination_position_norm)
+
+    def a_star(self, origin: VertexClass, destination: VertexClass):
+
+        total_iterations = len(self.vertices)
+        progress_bar = tqdm(total=total_iterations, desc='Finding The Best Path with The A*\'s Algorithm'.upper(),
+                            unit="Vertex")
+
+        closed_set = set()
+
+        # making our heap and adding the origin as the starting point of the dijkstra
+        root_value = []
+        heap = Heap()
+        f = self.calculate_heuristic(origin , destination)  #f = 0 + h
+        heap.inster(f, root_value, origin)
+
+        while len(closed_set) != len(self.vertices):
+            next_path = heap.remove_min()
+
+            if next_path.flight_info.name == destination.name:
+                next_path.path.append(next_path.flight_info)
+                return next_path
+
+            last_path = None
+
+            if isinstance(next_path, Entry):  # we want to expand the last destination we had
+                last_path = next_path.flight_info
+                closed_set.add(next_path.flight_info.name)
+
+            vertex = None
+            for item in self.vertices:
+                if item.name == last_path.name:
+                    vertex = item
+                    break
+
+            # finding the next destinations that we can go using this last path that we went
+            updated_path = list()
+            for i in next_path.path:
+                updated_path.append(i)
+            updated_path.append(vertex)
+
+            # next_path.path.append(next_path.flight_info)
+            # updated_path = next_path.path
+
+            for item in vertex.endings:
+                flag = False
+                if isinstance(item, VertexClass):
+                    # already has been checked
+                    for name in closed_set:
+                        if item.name == name:
+                            flag = True
+                            break
+                    if flag:
+                        continue
+
+                e = vertex.endings[item]
+                f = e.cost + next_path.key + self.calculate_heuristic(item, destination)
+                heap.inster(f, updated_path, item)
             progress_bar.update(1)
 
         return None
