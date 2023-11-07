@@ -1,4 +1,3 @@
-from Flight import Flight
 from Vertex import VertexClass
 
 class Entry:

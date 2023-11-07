@@ -15,8 +15,10 @@ except ValueError as e:
 # Call main.py with the inputs
 try:
     if sys.platform == 'win32':
+        # noinspection PyUnboundLocalVariable
         os.system(f'python ./main.py \"{input}\"')
     else:
+        # noinspection PyUnboundLocalVariable
         os.system(f'python3 ./main.py \"{input}\"')
 
 except Exception as e:
