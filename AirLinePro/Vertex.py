@@ -1,7 +1,9 @@
 class VertexClass:
 
-    def __init__(self, name):
+    def __init__(self, name, city, country):
         self.name = name
+        self.country = country
+        self.city = city
         self.startings = dict()
         self.endings = dict()
 

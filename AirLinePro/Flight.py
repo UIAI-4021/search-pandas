@@ -2,11 +2,11 @@ import pandas as pd
 from globals import _data_set_path
 
 class Flight:
-    def __init__(self , Airline , SourceAirport , DestinationAirport\
-                 , SourceAirport_City , SourceAirport_Country , SourceAirport_Latitude\
-                 , SourceAirport_Longitude , SourceAirport_Altitude , DestinationAirport_City\
-                 , DestinationAirport_Country, DestinationAirport_Latitude , DestinationAirport_Longitude\
-                 , DestinationAirport_Altitude , Distance , FlyTime , Price , cost):
+    def __init__(self , Airline , SourceAirport , DestinationAirport
+                 , SourceAirport_City , SourceAirport_Country , SourceAirport_Latitude
+                 , SourceAirport_Longitude , SourceAirport_Altitude , DestinationAirport_City
+                 , DestinationAirport_Country, DestinationAirport_Latitude , DestinationAirport_Longitude
+                 , DestinationAirport_Altitude , Distance , FlyTime , Price , Cost):
         self.Airline = Airline
         self.SourceAirport = SourceAirport
         self.DestinationAirport = DestinationAirport
@@ -23,7 +23,7 @@ class Flight:
         self.Distance = Distance
         self.FlyTime = FlyTime
         self.Price = Price
-        self.cost = cost
+        self.Cost = Cost
 
     @staticmethod
     def get_flights():

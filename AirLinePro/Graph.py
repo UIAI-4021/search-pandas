@@ -45,26 +45,28 @@ class Graph :
                 return edge
         return None
 
-    def add_edge(self ,starting : VertexClass, ending : VertexClass , cost):
+    def add_edge(self ,starting : VertexClass, ending : VertexClass, duration , time , price , cost):
         if self.get_edge(starting , ending) is None:
-            edge = EdgeClass(starting, ending, cost)
+            edge = EdgeClass(starting, ending,duration , time , price, cost)
             starting.add_ending(ending , edge)
             ending.add_starting(starting , edge)
             self.edges.add(edge)
 
 
-    def form_flights(self):
+    def form_graph(self):
         flights = Flight.get_flights()
         for flight in tqdm(flights, desc='Forming the graph'.upper(), unit='vertex'):
             if self.get_vertex(flight.SourceAirport) is None:
-                self.add_vertex(VertexClass(flight.SourceAirport))
-            if self.get_vertex(flight.DestinationAirport) is None:
-                self.add_vertex(VertexClass(flight.DestinationAirport))
+                self.add_vertex(VertexClass(flight.SourceAirport, flight.SourceAirport_City, flight.SourceAirport_Country))
+            if self.get_vertex(flight.DestinationAirport ) is None:
+                self.add_vertex(VertexClass(flight.DestinationAirport, flight.DestinationAirport_City , flight.DestinationAirport_Country))
+
             starting = self.get_vertex(str(flight.SourceAirport))
             ending = self.get_vertex(str(flight.DestinationAirport))
             last_edge = self.get_edge(starting, ending)
-            if last_edge is None or last_edge.cost > flight.cost:
-                self.add_edge(starting, ending, cost=flight.cost)
+
+            if last_edge is None or last_edge.cost > flight.Cost:
+                self.add_edge(starting, ending, duration=flight.Distance, time=flight.FlyTime, price=flight.Price, cost=flight.Cost)
 
     def dijkstra(self, origin: VertexClass, destination: VertexClass):
 
