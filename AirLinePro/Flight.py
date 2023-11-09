@@ -78,6 +78,9 @@ class FlightPrice:
         self.class_mapping = class_mapping
 
     @staticmethod
+    def set_df(df):
+        df = df
+    @staticmethod
     def get_flights_price():
         df = pd.read_csv(_flight_price_dataset)
         MyML.label_encode(df)
@@ -88,7 +91,7 @@ class FlightPrice:
                             record['class'], record['duration'],
                             record['days_left'], record['price'],
                             record['departureTimeMapping'], record['arrivalTimeMapping'],
-                            record['stopsMapping'], record['classMapping'],)
+                            record['stopsMapping'], record['classMapping'])
 
             flights_price.append(f)
         return flights_price
