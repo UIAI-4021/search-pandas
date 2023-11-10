@@ -1,4 +1,3 @@
-import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 
@@ -39,7 +38,7 @@ class MyML:
         X_flight_class = np.array(flight_price_df['classMapping'])
         X_duration = np.array(flight_price_df['duration'])
         X_days_left = np.array(flight_price_df['days_left'])
-        Y_price = np.array(flight_price_df['price'])
+        y_price = np.array(flight_price_df['price'])
 
         X_departure_time_train, X_departure_time_test, \
         X_arrival_time_train, X_arrival_time_test,\
@@ -47,19 +46,23 @@ class MyML:
         X_flight_class_train, X_flight_class_test,\
         X_duration_train, X_duration_test,\
         X_days_left_train, X_days_left_test,\
-        Y_price_train, Y_price_test = train_test_split(X_departure_time, X_arrival_time,
+        y_price_train, y_price_test = train_test_split(X_departure_time, X_arrival_time,
                                                         X_stops, X_flight_class,
                                                         X_duration, X_days_left,
-                                                        Y_price, test_size=0.2, shuffle=True)
+                                                        y_price, test_size=0.2, shuffle=True)
 
-        return X_departure_time_train, X_departure_time_test,\
-        X_arrival_time_train, X_arrival_time_test,\
-        X_stops_train, X_stops_test,\
-        X_flight_class_train, X_flight_class_test,\
-        X_duration_train, X_duration_test,\
-        X_days_left_train, X_days_left_test,\
-        Y_price_train, Y_price_test
+        X_train = np.array([X_departure_time_train,
+        X_arrival_time_train,
+        X_stops_train,
+        X_flight_class_train,
+        X_duration_train,
+        X_days_left_train])
 
+        y_train = np.array(y_price_train)
 
+        X_test = np.array([X_departure_time_test, X_arrival_time_test, X_stops_test, X_flight_class_test,
+                  X_duration_test, X_days_left_test])
 
+        y_test = np.array(y_price_test)
 
+        return X_train, X_test, y_train, y_test
