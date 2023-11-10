@@ -97,9 +97,9 @@ a_star_end_time = time.time()
 
 # region Print dijkstra
 
-if not os.path.exists('../output'):
-    os.mkdir('../output')
-file = open('../output/Dijkstra-Algorithm.txt', 'w', encoding="utf-8")
+if not os.path.exists('../Best Flight Output'):
+    os.mkdir('../Best Flight Output')
+file = open('../Best Flight Output/Dijkstra-Algorithm.txt', 'w', encoding="utf-8")
 
 
 dijkstra_execution_time = round(dijkstra_end_time - dijkstra_start_time,3)
@@ -172,9 +172,9 @@ file.close()
 
 # region Print A*
 
-if not os.path.exists('../output'):
-    os.mkdir('../output')
-file = open('../output/A-Star-Algorithm.txt', 'w', encoding="utf-8")
+if not os.path.exists('../Best Flight Output'):
+    os.mkdir('../Best Flight Output')
+file = open('../Best Flight Output/A-Star-Algorithm.txt', 'w', encoding="utf-8")
 
 
 a_star_execution_time = round(a_star_end_time - a_star_start_time, 3)
