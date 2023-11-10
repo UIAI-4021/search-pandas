@@ -6,9 +6,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from MachineLearning import MyML
-from Flight import FlightPrice
+from globals import _flight_price_dataset
+import pandas as pd
 
-df = FlightPrice.get_flights_price()
+df = pd.read_csv(_flight_price_dataset)
 MyML.label_encode(df)
 MyML.scaler(df)
 X_train, X_test, y_train, y_test = MyML.split(df)
@@ -19,7 +20,7 @@ initial_w = np.zeros((n,))
 initial_b = 0.
 # some gradient descent settings
 iterations = m
-alpha = 0.0008
+alpha = 0.0003
 # run gradient descent
 start = time.time()
 w_final, b_final, J_hist = MyML.gradient_descent(X_train, y_train, initial_w, initial_b, alpha, iterations)
@@ -48,14 +49,15 @@ plt.show()
 
 
 
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+fig.tight_layout()
 
-# fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
-# fig.tight_layout()
-#
-# ax1.plot(J_hist)
-# ax1.set_title("Cost vs. iteration")
-# ax1.set_ylabel('Cost')
-# ax1.set_xlabel('iteration step')
-#
-# plt.show()
-#
+ax1.plot(J_hist)
+ax1.set_title("Cost vs. iteration")
+ax1.set_ylabel('Cost')
+ax1.set_xlabel('iteration step')
+
+plt.show()
+
+
+

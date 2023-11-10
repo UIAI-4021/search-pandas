@@ -18,14 +18,8 @@ class MyML:
     @staticmethod
     def label_encode(flight_price_df):
 
-        labeL_encoder = LabelEncoder()
-
-        flight_price_df['departure_time'] = labeL_encoder.fit_transform(flight_price_df['departure_time'].values)
-        flight_price_df['arrival_time'] = labeL_encoder.fit_transform(flight_price_df['arrival_time'].values)
-        flight_price_df['stops'] = labeL_encoder.fit_transform(flight_price_df['stops'].values)
-        flight_price_df['class'] = labeL_encoder.fit_transform(flight_price_df['class'].values)
-
-
+        df_encoded = pd.get_dummies(flight_price_df, columns=['departure_time', 'arrival_time', 'stops', 'class'], drop_first=True)
+        return df_encoded
     @staticmethod
     def scaler(flight_price_df):
         flight_price_df = pd.DataFrame(flight_price_df)
@@ -36,10 +30,11 @@ class MyML:
     @staticmethod
     def split(flight_price_df):
         flight_price_df = pd.DataFrame(flight_price_df)
-
+        x = flight_price_df.drop(columns=['price'])
+        y = flight_price_df['price'].values.ravel()
         x_train, x_test, y_train, y_test = train_test_split(
-            flight_price_df.iloc[:, :-1].values,
-            flight_price_df.iloc[:, -1].values.ravel(),
+            x,
+            y,
             shuffle=True,
             test_size=0.2
         )
@@ -49,11 +44,8 @@ class MyML:
     @staticmethod
     def compute_cost(X, y, w, b):
         m = X.shape[0]
-        cost = 0.0
-        for i in range(m):
-            f_wb_i = np.dot(X[i], w) + b  # (n,)(n,) = scalar (see np.dot)
-            cost = cost + (f_wb_i - y[i]) ** 2  # scalar
-        cost = cost / (2 * m)  # scalar
+        err = (X @ w + b - y)**2
+        cost = np.sum(err) / (2*m)
         return cost
 
 
@@ -91,9 +83,9 @@ class MyML:
 
             w_history.append(w)
 
-            if len(w_history) >= 7000:
+            if len(w_history) >= 200:
                 for j in range(len(w_history)-1, len(w_history)-100, -1):
-                    if np.allclose(w_history[-1], w_history[j], atol=1e-5):
+                    if np.allclose(w_history[-1], w_history[j], atol=1e-2):
                         continue
                     else:
                         break
