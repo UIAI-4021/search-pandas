@@ -1,7 +1,6 @@
 import copy
-import math
+from sklearn.preprocessing import StandardScaler
 
-import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 
@@ -50,8 +49,9 @@ class MyML:
         X_days_left = np.array(flight_price_df['days_left'])
         y_price = np.array(flight_price_df['price'])
 
-        # y_price = MyML.scaler(y_price)
-        X_duration = MyML.scaler(X_duration)
+
+        scaler = StandardScaler()
+        X_duration = scaler.fit_transform(X_duration)
 
         X_departure_time_train, X_departure_time_test, \
         X_arrival_time_train, X_arrival_time_test,\
@@ -87,6 +87,20 @@ class MyML:
 
 
         return X_train, X_test, y_train, y_test
+
+
+
+    @staticmethod
+    def compute_cost(X, y, w, b):
+        m = X.shape[0]
+        cost = 0.0
+        for i in range(m):
+            f_wb_i = np.dot(X[i], w) + b  # (n,)(n,) = scalar (see np.dot)
+            cost = cost + (f_wb_i - y[i]) ** 2  # scalar
+        cost = cost / (2 * m)  # scalar
+        return cost
+
+
 
 
     @staticmethod
@@ -137,8 +151,11 @@ class MyML:
 
         # An array to store cost J and w's at each iteration primarily for graphing later
         w_history = []
+        J_history = []
         w = copy.deepcopy(w_in)  # avoid modifying global w within function
         b = b_in
+
+
 
         converged = False
         for i in range(num_iters):
@@ -151,6 +168,9 @@ class MyML:
             # Update Parameters using w, b, alpha and gradient
             w = w - alpha * dj_dw
             b = b - alpha * dj_db
+
+            if i < 100000:  # prevent resource exhaustion
+                J_history.append(MyML.compute_cost(X, y, w, b))
 
             w_history.append(w)
 
@@ -166,4 +186,4 @@ class MyML:
                     converged = True
 
 
-        return w, b
+        return w, b, J_history
