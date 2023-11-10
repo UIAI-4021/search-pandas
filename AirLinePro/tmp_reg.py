@@ -17,19 +17,26 @@ X_train, X_test, y_train, y_test = MyML.split(df)
 m,n = X_train.shape
 initial_w = np.zeros((n,))
 initial_b = 0.
+m=1000
 # some gradient descent settings
 iterations = m
 alpha = 0.0003
 # run gradient descent
 start = time.time()
-w_final, b_final = MyML.gradient_descent(X_train, y_train, initial_w, initial_b, alpha, iterations)
+w_final, b_final = MyML.gradient_descent(X_train[0:1000], y_train[0:1000], initial_w, initial_b, alpha, iterations)
 end = time.time()
 print(f"b,w found by gradient descent: {b_final:0.2f},{w_final} ")
 m, _ = X_train.shape
-for i in range(m):
+pre = []
+for i in range(1000):
     print(f"prediction: {np.dot(X_train[i], w_final) + b_final:0.2f}, target value: {y_train[i]}")
+    pre.append(np.dot(X_train[i], w_final) + b_final)
 
 print(end - start)
+
+MyML.checking_error(y_train, pre)
+
+
 
 # fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
 # fig.tight_layout()
@@ -41,15 +48,3 @@ print(end - start)
 #
 # plt.show()
 #
-
-
-
-# from MachineLearning import MyML
-# import pandas as pd
-# from globals import _flight_price_dataset
-# df = pd.read_csv(_flight_price_dataset)
-# MyML.label_encode(df)
-# MyML.scaler(df)
-# print(df)
-# x_train, x_test, y_train, y_test = MyML.split(df)
-# print()

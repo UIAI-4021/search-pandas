@@ -1,17 +1,29 @@
 import copy
+import math
+
 from sklearn.preprocessing import StandardScaler
 import sklearn
 from sklearn.preprocessing import LabelEncoder
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from tqdm import tqdm
+from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
 
 
 class MyML:
 
     @staticmethod
     def label_encode(flight_price_df):
+        time_mapping = {
+            'Early_Morning': 1,
+            'Morning': 2,
+            'Afternoon': 3,
+            'Evening': 4,
+            'Night': 5,
+            'Late_Night': 6
+        }
 
         labeL_encoder = LabelEncoder()
 
@@ -109,7 +121,7 @@ class MyML:
 
 
         converged = False
-        for i in tqdm(range(num_iters)):
+        for i in range(num_iters):
             if converged:
                 break
 
@@ -138,3 +150,20 @@ class MyML:
 
 
         return w, b, J_history
+
+
+    @staticmethod
+    def checking_error(y_true, y_pred):
+        # MAE
+        mae = mean_absolute_error(y_true, y_pred)
+        # MSE
+        mse = mean_squared_error(y_true, y_pred)
+        # RMSE
+        rsme = math.sqrt(mse)
+        # R2
+        r2 = r2_score(y_true, y_pred)
+
+        print(mae, mse, rsme, r2)
+
+
+
