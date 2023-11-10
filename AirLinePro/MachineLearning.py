@@ -91,7 +91,7 @@ class MyML:
 
             w_history.append(w)
 
-            if len(w_history) >= 100:
+            if len(w_history) >= 7000:
                 for j in range(len(w_history)-1, len(w_history)-100, -1):
                     if np.allclose(w_history[-1], w_history[j], atol=1e-5):
                         continue
@@ -114,7 +114,7 @@ class MyML:
         # R2
         r2 = r2_score(y_true, y_pred)
 
-        print(mae, mse, rsme, r2)
+        print(f'MAE: {mae}, MSE: {mse}, RMSE: {rsme}, R2: {r2}')
 
     # @staticmethod
     # def compute_gradient(X, y, w, b):

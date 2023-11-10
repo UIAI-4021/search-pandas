@@ -19,7 +19,7 @@ initial_w = np.zeros((n,))
 initial_b = 0.
 # some gradient descent settings
 iterations = m
-alpha = 0.0003
+alpha = 0.0008
 # run gradient descent
 start = time.time()
 w_final, b_final, J_hist = MyML.gradient_descent(X_train, y_train, initial_w, initial_b, alpha, iterations)
