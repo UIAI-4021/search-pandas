@@ -52,6 +52,8 @@ class MyML:
 
         scaler = StandardScaler()
         X_duration = scaler.fit_transform(X_duration)
+        X_days_left = scaler.fit_transform(X_days_left)
+
 
         X_departure_time_train, X_departure_time_test, \
         X_arrival_time_train, X_arrival_time_test,\
