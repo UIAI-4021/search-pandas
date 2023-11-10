@@ -49,10 +49,15 @@ class MyML:
         X_days_left = np.array(flight_price_df['days_left'])
         y_price = np.array(flight_price_df['price'])
 
+        X_duration_mean = np.mean(X_duration)
+        X_duration_std_dev = np.std(X_duration)
+        X_duration = (X_duration - X_duration_mean) / X_duration_std_dev
 
-        scaler = StandardScaler()
-        X_duration = scaler.fit_transform(X_duration)
-        X_days_left = scaler.fit_transform(X_days_left)
+        X_days_left_mean = np.mean(X_days_left)
+        X_days_left_std_dev = np.std(X_days_left)
+        X_days_left = (X_days_left - X_days_left_mean) / X_days_left_std_dev
+
+
 
 
         X_departure_time_train, X_departure_time_test, \
