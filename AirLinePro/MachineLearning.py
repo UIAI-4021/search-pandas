@@ -1,7 +1,5 @@
 import copy
-import math
 
-import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 
@@ -34,6 +32,12 @@ class MyML:
         flight_price_df['stopsMapping'] = flight_price_df['stops'].map(stops_mapping)
         flight_price_df['classMapping'] = flight_price_df['class'].map(class_mapping)
 
+
+    @staticmethod
+    def scaler(np_arr):
+        mean_value = np.mean(np_arr)
+        np_arr = np_arr/mean_value
+
     @staticmethod
     def data_set_split(flight_price_df):
         X_departure_time = np.array(flight_price_df['departureTimeMapping'])
@@ -43,6 +47,9 @@ class MyML:
         X_duration = np.array(flight_price_df['duration'])
         X_days_left = np.array(flight_price_df['days_left'])
         y_price = np.array(flight_price_df['price'])
+
+        MyML.scaler(y_price)
+        MyML.scaler(X_duration)
 
         X_departure_time_train, X_departure_time_test, \
         X_arrival_time_train, X_arrival_time_test,\
