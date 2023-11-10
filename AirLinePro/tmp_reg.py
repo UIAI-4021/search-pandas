@@ -27,11 +27,14 @@ end = time.time()
 print(f"b,w found by gradient descent: {b_final:0.2f},{w_final} ")
 m, _ = X_train.shape
 pre = []
-for i in range(1000):
+for i in range(m):
     print(f"prediction: {np.dot(X_train[i], w_final) + b_final:0.2f}, target value: {y_train[i]}")
     pre.append(np.dot(X_train[i], w_final) + b_final)
 
 print(end - start)
+
+MyML.checking_error(y_train, pre)
+
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
 fig.tight_layout()
@@ -43,18 +46,16 @@ ax1.set_xlabel('iteration step')
 
 plt.show()
 
-MyML.checking_error(y_train, pre)
 
 
 
-# from MachineLearning import MyML
-# import pandas as pd
-# from globals import _flight_price_dataset
-# df = pd.read_csv(_flight_price_dataset)
-# MyML.label_encode(df)
-# MyML.scaler(df)
-# print(df)
-# x_train, x_test, y_train, y_test = MyML.split(df)
-# print()
-
-
+# fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+# fig.tight_layout()
+#
+# ax1.plot(J_hist)
+# ax1.set_title("Cost vs. iteration")
+# ax1.set_ylabel('Cost')
+# ax1.set_xlabel('iteration step')
+#
+# plt.show()
+#
