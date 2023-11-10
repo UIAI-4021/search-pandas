@@ -49,11 +49,8 @@ class MyML:
     @staticmethod
     def compute_cost(X, y, w, b):
         m = X.shape[0]
-        cost = 0.0
-        for i in range(m):
-            f_wb_i = np.dot(X[i], w) + b  # (n,)(n,) = scalar (see np.dot)
-            cost = cost + (f_wb_i - y[i]) ** 2  # scalar
-        cost = cost / (2 * m)  # scalar
+        err = (X @ w + b - y) ** 2
+        cost = np.sum(err) / (2 * m)
         return cost
 
 
@@ -91,7 +88,7 @@ class MyML:
 
             w_history.append(w)
 
-            if len(w_history) >= 7000:
+            if len(w_history) >= 10000:
                 for j in range(len(w_history)-1, len(w_history)-100, -1):
                     if np.allclose(w_history[-1], w_history[j], atol=1e-5):
                         continue
