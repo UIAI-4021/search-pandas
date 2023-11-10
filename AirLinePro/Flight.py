@@ -84,6 +84,7 @@ class FlightPrice:
     def get_flights_price():
         df = pd.read_csv(_flight_price_dataset)
         MyML.label_encode(df)
+        MyML.scaler(df)
         flights_price = list()
         for index, record in df.iterrows():
 
