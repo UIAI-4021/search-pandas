@@ -29,12 +29,10 @@ class MyML:
 
     @staticmethod
     def split(flight_price_df):
-        flight_price_df = pd.DataFrame(flight_price_df)
-        x = flight_price_df.drop(columns=['price'])
-        y = flight_price_df['price'].values.ravel()
+
         x_train, x_test, y_train, y_test = train_test_split(
-            x,
-            y,
+            np.array(flight_price_df.drop('price', axis=1)),
+            np.array(flight_price_df['price']),
             shuffle=True,
             test_size=0.2
         )
