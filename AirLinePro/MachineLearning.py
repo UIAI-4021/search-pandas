@@ -44,8 +44,8 @@ class MyML:
     @staticmethod
     def compute_cost(X, y, w, b):
         m = X.shape[0]
-        err = (X @ w + b - y)**2
-        cost = np.sum(err) / (2*m)
+        err = (X @ w + b - y) ** 2
+        cost = np.sum(err) / (2 * m)
         return cost
 
 
