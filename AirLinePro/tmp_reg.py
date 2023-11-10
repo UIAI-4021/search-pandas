@@ -1,7 +1,7 @@
 import time
 
 import matplotlib
-matplotlib.use('TkAgg')  # You can replace 'TkAgg' with the backend of your choice, e.g., 'Qt5Agg', 'Agg', etc.
+# matplotlib.use('TkAgg')  # You can replace 'TkAgg' with the backend of your choice, e.g., 'Qt5Agg', 'Agg', etc.
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -10,8 +10,8 @@ from globals import _flight_price_dataset
 import pandas as pd
 
 df = pd.read_csv(_flight_price_dataset)
-MyML.label_encode(df)
 MyML.scaler(df)
+df = MyML.label_encode(df)
 X_train, X_test, y_train, y_test = MyML.split(df)
 
 
@@ -59,5 +59,13 @@ ax1.set_xlabel('iteration step')
 
 plt.show()
 
-
-
+#
+# from MachineLearning import MyML
+# from globals import _flight_price_dataset
+# import pandas as pd
+# df = pd.read_csv(_flight_price_dataset)
+# df = MyML.label_encode(df)
+# MyML.scaler(df)
+# x_train, x_test, y_train, y_test = MyML.split(df)
+# print(df)
+#
