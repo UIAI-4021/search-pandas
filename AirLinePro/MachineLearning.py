@@ -1,4 +1,6 @@
 import copy
+import math
+
 from sklearn.preprocessing import StandardScaler
 import sklearn
 from sklearn.preprocessing import LabelEncoder
@@ -101,6 +103,18 @@ class MyML:
 
         return w, b, J_history
 
+    @staticmethod
+    def checking_error(y_true, y_pred):
+        # MAE
+        mae = mean_absolute_error(y_true, y_pred)
+        # MSE
+        mse = mean_squared_error(y_true, y_pred)
+        # RMSE
+        rsme = math.sqrt(mse)
+        # R2
+        r2 = r2_score(y_true, y_pred)
+
+        print(mae, mse, rsme, r2)
 
     # @staticmethod
     # def compute_gradient(X, y, w, b):
