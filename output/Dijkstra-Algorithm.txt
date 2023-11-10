@@ -1,6 +1,6 @@
 #############
 Dijkstra Algorithm
-Execution Time: 0.039s
+Execution Time: 0.06s
 .-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
 Flight #1:
 From: Imam Khomeini International Airport - Tehran, Iran
