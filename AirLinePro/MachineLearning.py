@@ -1,102 +1,46 @@
 import copy
 from sklearn.preprocessing import StandardScaler
-
+import sklearn
+from sklearn.preprocessing import LabelEncoder
+import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
+from tqdm import tqdm
 
 
 class MyML:
 
     @staticmethod
     def label_encode(flight_price_df):
-        time_mapping = {
-            'Early_Morning': 1,
-            'Morning': 2,
-            'Afternoon': 3,
-            'Evening': 4,
-            'Night': 5,
-            'Late_Night': 6
-        }
 
-        stops_mapping = {
-            'zero': 1,
-            'one': 2,
-            'two_or_more': 3
-        }
-        class_mapping = {
-            'Economy': 1,
-            'Business': 2
-        }
+        labeL_encoder = LabelEncoder()
 
-        flight_price_df['departureTimeMapping'] = flight_price_df['departure_time'].map(time_mapping)
-        flight_price_df['arrivalTimeMapping'] = flight_price_df['arrival_time'].map(time_mapping)
-        flight_price_df['stopsMapping'] = flight_price_df['stops'].map(stops_mapping)
-        flight_price_df['classMapping'] = flight_price_df['class'].map(class_mapping)
+        flight_price_df['departure_time'] = labeL_encoder.fit_transform(flight_price_df['departure_time'].values)
+        flight_price_df['arrival_time'] = labeL_encoder.fit_transform(flight_price_df['arrival_time'].values)
+        flight_price_df['stops'] = labeL_encoder.fit_transform(flight_price_df['stops'].values)
+        flight_price_df['class'] = labeL_encoder.fit_transform(flight_price_df['class'].values)
 
 
     @staticmethod
-    def scaler(np_arr):
-        mean_value = np.mean(np_arr)
-        np_arr = np_arr/mean_value
-        return np_arr
+    def scaler(flight_price_df):
+        flight_price_df = pd.DataFrame(flight_price_df)
+        scaler = StandardScaler()
+        flight_price_df['days_left'] = scaler.fit_transform(flight_price_df['days_left'].values.reshape(-1,1))
+        flight_price_df['duration'] = scaler.fit_transform(flight_price_df['duration'].values.reshape(-1,1))
+
     @staticmethod
-    def data_set_split(flight_price_df):
-        X_departure_time = np.array(flight_price_df['departureTimeMapping'])
-        X_arrival_time = np.array(flight_price_df['arrivalTimeMapping'])
-        X_stops = np.array(flight_price_df['stopsMapping'])
-        X_flight_class = np.array(flight_price_df['classMapping'])
-        X_duration = np.array(flight_price_df['duration'])
-        X_days_left = np.array(flight_price_df['days_left'])
-        y_price = np.array(flight_price_df['price'])
+    def split(flight_price_df):
+        flight_price_df = pd.DataFrame(flight_price_df)
 
-        X_duration_mean = np.mean(X_duration)
-        X_duration_std_dev = np.std(X_duration)
-        X_duration = (X_duration - X_duration_mean) / X_duration_std_dev
+        x_train, x_test, y_train, y_test = train_test_split(
+            flight_price_df.iloc[:, :-1].values,
+            flight_price_df.iloc[:, -1].values.ravel(),
+            shuffle=True,
+            test_size=0.2
+        )
+        return x_train, x_test, y_train, y_test
 
-        X_days_left_mean = np.mean(X_days_left)
-        X_days_left_std_dev = np.std(X_days_left)
-        X_days_left = (X_days_left - X_days_left_mean) / X_days_left_std_dev
-
-
-
-
-        X_departure_time_train, X_departure_time_test, \
-        X_arrival_time_train, X_arrival_time_test,\
-        X_stops_train, X_stops_test,\
-        X_flight_class_train, X_flight_class_test,\
-        X_duration_train, X_duration_test,\
-        X_days_left_train, X_days_left_test,\
-        y_price_train, y_price_test = train_test_split(X_departure_time, X_arrival_time,
-                                                        X_stops, X_flight_class,
-                                                        X_duration, X_days_left,
-                                                        y_price, test_size=0.2, shuffle=True)
-
-        X_train_list = []
-        X_test_list = []
-
-        for i in range(len(X_departure_time_train)):
-            tmp_train_arr = np.array([X_departure_time_train[i], X_arrival_time_train[i], X_stops_train[i],
-                                X_flight_class_train[i], X_duration_train[i], X_days_left_train[i]])
-
-            X_train_list.append(tmp_train_arr)
-
-        for i in range(len(X_departure_time_test)):
-
-            tmp_test_arr = np.array([X_departure_time_test[i], X_arrival_time_test[i], X_stops_test[i],
-                                X_flight_class_test[i], X_duration_test[i], X_days_left_test[i]])
-
-            X_test_list.append(tmp_test_arr)
-
-        X_train = np.vstack(X_train_list)
-        X_test = np.vstack(X_test_list)
-        y_train = np.array(y_price_train)
-        y_test = np.array(y_price_test)
-
-
-        return X_train, X_test, y_train, y_test
-
-
-
+    #
     @staticmethod
     def compute_cost(X, y, w, b):
         m = X.shape[0]
@@ -165,7 +109,7 @@ class MyML:
 
 
         converged = False
-        for i in range(num_iters):
+        for i in tqdm(range(num_iters)):
             if converged:
                 break
 
