@@ -7,7 +7,7 @@ from Flight import Flight
 from Heap import Heap, Entry
 from Vertex import VertexClass
 from Edge import EdgeClass
-class Graph :
+class Graph:
 
     # singleTon graph
     _instance = None
