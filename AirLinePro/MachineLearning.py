@@ -1,3 +1,6 @@
+import copy
+import math
+
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -50,7 +53,7 @@ class MyML:
         y_price_train, y_price_test = train_test_split(X_departure_time, X_arrival_time,
                                                         X_stops, X_flight_class,
                                                         X_duration, X_days_left,
-                                                        Y_price, test_size=0.2, shuffle=True)
+                                                        y_price, test_size=0.2, shuffle=True)
 
         X_train = np.array([X_departure_time_train,
         X_arrival_time_train,
@@ -68,65 +71,75 @@ class MyML:
 
         return X_train, X_test, y_train, y_test
 
-    @staticmethod
-    def finding_w(problem, max_epochs, batch_size, learning_rate):
-
-        w = 0
-        converged_w = 0
-        pre_w = None
-        for t in range(0,max_epochs):
-            if converged_w >= 100:
-                break
-            elif converged_w > 0 and pre_w == t:
-                converged_w += 1
-            else:
-                converged_w = 1
-
-            for batch in MyML.get_batches(problem.data, batch_size):
-                w = MyML.get_derivation(w, batch, learning_rate)
-
 
     @staticmethod
-    def get_batches(data, batch_size):
-        # Helper function to generate mini-batches from the data
-        for i in range(0, len(data), batch_size):
-            yield data[i:i + batch_size]
+    def compute_gradient(X, y, w, b):
+        """
+        Computes the gradient for linear regression
+        Args:
+          X (ndarray (m,n)): Data, m examples with n features
+          y (ndarray (m,)) : target values
+          w (ndarray (n,)) : model parameters
+          b (scalar)       : model parameter
+
+        Returns:
+          dj_dw (ndarray (n,)): The gradient of the cost w.r.t. the parameters w.
+          dj_db (scalar):       The gradient of the cost w.r.t. the parameter b.
+        """
+        m, n = X.shape  # (number of examples, number of features)
+        dj_dw = np.zeros((n,))
+        dj_db = 0.
+
+        for i in range(m):
+            err = (np.dot(X[i], w) + b) - y[i]
+            for j in range(n):
+                dj_dw[j] = dj_dw[j] + err * X[i, j]
+            dj_db = dj_db + err
+        dj_dw = dj_dw / m
+        dj_db = dj_db / m
+
+        return dj_db, dj_dw
     @staticmethod
-    def get_derivation(w, b, alpha):
-        w, b = symbols('w b')
-        expr = b/w
-        expr_diff = Derivative(expr, w, b)
+    def gradient_descent(X, y, w_in, b_in, cost_function, gradient_function, alpha, num_iters):
+        """
+        Performs batch gradient descent to learn w and b. Updates w and b by taking
+        num_iters gradient steps with learning rate alpha
 
-        return w - (alpha * expr_diff)
+        Args:
+          X (ndarray (m,n))   : Data, m examples with n features
+          y (ndarray (m,))    : target values
+          w_in (ndarray (n,)) : initial model parameters
+          b_in (scalar)       : initial model parameter
+          cost_function       : function to compute cost
+          gradient_function   : function to compute the gradient
+          alpha (float)       : Learning rate
+          num_iters (int)     : number of iterations to run gradient descent
 
+        Returns:
+          w (ndarray (n,)) : Updated values of parameters
+          b (scalar)       : Updated value of parameter
+          """
 
-    def gradient_descent(problem, max_epochs, batch_size, learning_rate):
-        # Initialize parameters
-        x = initialize_parameters(problem.model_type)
+        # An array to store cost J and w's at each iteration primarily for graphing later
+        J_history = []
+        w = copy.deepcopy(w_in)  # avoid modifying global w within function
+        b = b_in
 
-        # Set initial epoch
-        t = 0
+        for i in range(num_iters):
 
-        # Set convergence criteria (you need to define this based on your problem)
-        converged = False
+            # Calculate the gradient and update the parameters
+            dj_db, dj_dw = MyML.compute_gradient(X, y, w, b)
 
-        while t < max_epochs and not converged:
-            # Iterate over batches
-            for batch in get_batches(problem.data, batch_size):
-                # Compute gradients
-                gradients = compute_gradients(problem, x, batch)
+            # Update Parameters using w, b, alpha and gradient
+            w = w - alpha * dj_dw
+            b = b - alpha * dj_db
 
-                # Update parameters using gradients and learning rate
-                x = update_parameters(x, gradients, learning_rate)
+            # Save cost J at each iteration
+            if i < 100000:  # prevent resource exhaustion
+                J_history.append(cost_function(X, y, w, b))
 
-                # Increment epoch
-                t += 1
+            # Print cost every at intervals 10 times or as many iterations if < 10
+            if i % math.ceil(num_iters / 10) == 0:
+                print(f"Iteration {i:4d}: Cost {J_history[-1]:8.2f}   ")
 
-            # Check for convergence based on your criteria
-            # You need to implement the convergence check based on your problem
-            converged = check_convergence(x, problem)
-
-        return x
-
-
-
+        return w, b, J_history  # return final w,b and J history for graphing
