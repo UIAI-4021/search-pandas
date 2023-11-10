@@ -1,5 +1,7 @@
 import copy
+import math
 
+import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 
@@ -131,7 +133,8 @@ class MyML:
         b = b_in
 
         converged = False
-        for i in range(num_iters) and (not converged):
+        for i in range(num_iters):
+            if converged: break
 
             # Calculate the gradient and update the parameters
             dj_db, dj_dw = MyML.compute_gradient(X, y, w, b)
@@ -144,13 +147,14 @@ class MyML:
 
             converged_tmp = w
             a = 0
-            for j in range(len(w_history), len(w_history)-100, -1):
-                if abs(converged_tmp - w_history[j]) < 0.00001:
-                    continue
-                else:
-                    a = 1
-            if a == 0:
-                converged = True
+            if len(w_history) >= 100:
+                for j in range(len(w_history)-1, len(w_history)-100, -1):
+                    if (abs(converged_tmp - w_history[j]) < 0.00001).all():
+                        continue
+                    else:
+                        a = 1
+                if a == 0:
+                    converged = True
 
 
         return w, b
