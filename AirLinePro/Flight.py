@@ -85,13 +85,13 @@ class FlightPrice:
         df = pd.read_csv(_flight_price_dataset)
         MyML.label_encode(df)
         flights_price = list()
-        for index, record in df.iterrows():
-
-            f = FlightPrice(record['departure_time'], record['stops'], record['arrival_time'],
-                            record['class'], record['duration'],
-                            record['days_left'], record['price'],
-                            record['departureTimeMapping'], record['arrivalTimeMapping'],
-                            record['stopsMapping'], record['classMapping'])
-
-            flights_price.append(f)
-        return df, flights_price
+        # for index, record in df.iterrows():
+        #
+        #     f = FlightPrice(record['departure_time'], record['stops'], record['arrival_time'],
+        #                     record['class'], record['duration'],
+        #                     record['days_left'], record['price'],
+        #                     record['departureTimeMapping'], record['arrivalTimeMapping'],
+        #                     record['stopsMapping'], record['classMapping'])
+        #
+        #     flights_price.append(f)
+        return df

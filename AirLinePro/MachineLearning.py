@@ -39,7 +39,7 @@ class MyML:
     def scaler(np_arr):
         mean_value = np.mean(np_arr)
         np_arr = np_arr/mean_value
-
+        return np_arr
     @staticmethod
     def data_set_split(flight_price_df):
         X_departure_time = np.array(flight_price_df['departureTimeMapping'])
@@ -50,8 +50,8 @@ class MyML:
         X_days_left = np.array(flight_price_df['days_left'])
         y_price = np.array(flight_price_df['price'])
 
-        MyML.scaler(y_price)
-        MyML.scaler(X_duration)
+        # y_price = MyML.scaler(y_price)
+        X_duration = MyML.scaler(X_duration)
 
         X_departure_time_train, X_departure_time_test, \
         X_arrival_time_train, X_arrival_time_test,\
@@ -64,19 +64,27 @@ class MyML:
                                                         X_duration, X_days_left,
                                                         y_price, test_size=0.2, shuffle=True)
 
-        X_train = np.array([X_departure_time_train,
-        X_arrival_time_train,
-        X_stops_train,
-        X_flight_class_train,
-        X_duration_train,
-        X_days_left_train])
+        X_train_list = []
+        X_test_list = []
 
+        for i in range(len(X_departure_time_train)):
+            tmp_train_arr = np.array([X_departure_time_train[i], X_arrival_time_train[i], X_stops_train[i],
+                                X_flight_class_train[i], X_duration_train[i], X_days_left_train[i]])
+
+            X_train_list.append(tmp_train_arr)
+
+        for i in range(len(X_departure_time_test)):
+
+            tmp_test_arr = np.array([X_departure_time_test[i], X_arrival_time_test[i], X_stops_test[i],
+                                X_flight_class_test[i], X_duration_test[i], X_days_left_test[i]])
+
+            X_test_list.append(tmp_test_arr)
+
+        X_train = np.vstack(X_train_list)
+        X_test = np.vstack(X_test_list)
         y_train = np.array(y_price_train)
-
-        X_test = np.array([X_departure_time_test, X_arrival_time_test, X_stops_test, X_flight_class_test,
-                  X_duration_test, X_days_left_test])
-
         y_test = np.array(y_price_test)
+
 
         return X_train, X_test, y_train, y_test
 
@@ -134,7 +142,8 @@ class MyML:
 
         converged = False
         for i in range(num_iters):
-            if converged: break
+            if converged:
+                break
 
             # Calculate the gradient and update the parameters
             dj_db, dj_dw = MyML.compute_gradient(X, y, w, b)
