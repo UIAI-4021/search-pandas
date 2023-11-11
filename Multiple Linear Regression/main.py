@@ -9,17 +9,22 @@ Author: - Melika Shirian
         - Kianoosh vadaei
 Date: 2023-11-04
 Description:
+This project implements a multiple linear regression model for predicting flight prices. The team developed custom solutions and leveraged scikit-learn for scaling and labeling, demonstrating a blend of manual implementation and established tools.
 
+The dataset includes six features, expanded to 15 after one-hot labeling. Notable output includes the "Cost per Iteration" plot in the regression output folder, providing insights into the training process.
 
 Usage:
-    You can run this script by executing it from the command line, providing necessary arguments and options. Example usage:
+You can run this script by executing it from the command line, providing necessary arguments and options. Example usage:
 
-    $ python my_project.py [arguments] [options]
+python script/run_multiple_regression.py
 
 Requirements:
     - Python 3.x
-    - "art" library for ASCII art generation
-    - "tqbm" library for progress bar support
+    - "tqdm" library for progress bar support
+    - pandas
+    - numpy
+    - scikit-learn
+    - matplotlib
 
 Contributors:
     - Kianoosh Vadaei
