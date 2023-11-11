@@ -30,6 +30,8 @@ Notes:
     - Teaching Assistants for the course are Kian Majlesi and Audrina Ebrahimi.
 
 """
+
+#region inports
 import os
 import time
 import matplotlib.pyplot as plt
@@ -37,50 +39,75 @@ import numpy as np
 from MachineLearning import MyML
 from globals import _flight_price_dataset
 import pandas as pd
+#endregion
 
+# pre-process
+# ==============================
 df = pd.read_csv(_flight_price_dataset)
 MyML.scaler(df)
 df = MyML.label_encode(df)
 X_train, X_test, y_train, y_test = MyML.split(df)
 
-
-m,n = X_train.shape
+# some gradient descent settings
+# ==============================
+m, n = X_train.shape
 initial_w = np.zeros((n,))
 initial_b = 0.
-# some gradient descent settings
 iterations = m
 _ALFA = 0.006
-# run gradient descent
+
 start = time.time()
 
 w_final, b_final, J_hist = MyML.gradient_descent(X_train, y_train, initial_w, initial_b, _ALFA, iterations)
 
 end = time.time()
-# print(f"b,w found by gradient descent: {b_final:0.2f},{w_final} ")
+training_time = end - start
+
+# predict
+# ==============================
 m, _ = X_test.shape
 pre = []
 for i in range(m):
-    # print(f"prediction: {np.dot(X_test[i], w_final) + b_final:0.2f}, target value: {y_test[i]}")
     pre.append(np.dot(X_test[i], w_final) + b_final)
 
-training_time = end - start
-
-mae, mse, rsme, r2 = MyML.calculate_error(y_test, pre)
+mae, mse, rmse, r2 = MyML.calculate_error(y_test, pre)
 
 #region output
 if not os.path.exists('../Multiple Linear Regression Output'):
     os.mkdir('../Multiple Linear Regression Output')
-file = open('../Multiple Linear Regression Output/Output.txt', 'w', encoding="utf-8")
+file = open('../Multiple Linear Regression Output/Pandas-UIAI4021-PR1-Q2.txt', 'w', encoding="utf-8")
 
+print('PRICE = ', end='')
+file.write('PRICE = ')
+for i in range(len(w_final)):
+    print(f'{w_final[i]} * {df.columns[i]}' , end='')
+    file.write(f'{w_final[i]} * {df.columns[i]}')
+    if i != (len(w_final) - 1):
+        print(' + ', end='')
+        file.write(' + ')
+print(f'\nTraining Time: {training_time}s\n')
+file.write(f'\nTraining Time: {training_time}s\n\n')
 
+print(f'Logs:\n'
+      f'MSE: {mse}\n'
+      f'RMSE: {rmse}\n'
+      f'MAE: {mae}\n'
+      f'R2: {r2}')
+file.write(f'Logs:\n'
+      f'MSE: {mse}\n'
+      f'RMSE: {rmse}\n'
+      f'MAE: {mae}\n'
+      f'R2: {r2}')
 #endregion
 
+#region plot
 plt.plot(J_hist, label='Cost vs. Iteration', color='magenta', linestyle='-' )
-plt.title("Cost vs. iteration")
+plt.title("Cost vs. Iteration")
 plt.xlabel('Iteration Step')
-plt.ylabel('Cost')
+plt.ylabel('Cost(MSE)')
 plt.grid(True, linestyle='--', alpha=0.7)
 plt.legend()
+plt.savefig('../Multiple Linear Regression Output/Cost-plot.png')
 plt.show()
-
+#endregion
 

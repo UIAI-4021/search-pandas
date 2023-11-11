@@ -77,7 +77,6 @@ class MyML:
 
             if i < 100000:
                 J_history.append(MyML.compute_cost(X, y, w, b))
-
             w_history.append(w)
 
             if len(w_history) >= 20000:
@@ -94,14 +93,22 @@ class MyML:
 
     @staticmethod
     def calculate_error(y_true, y_pred):
+        Y_true = np.array(copy.copy(y_true))
+        Y_pred = np.array(copy.copy(y_pred))
+
+        scaler = StandardScaler()
+
+        Y_true = scaler.fit_transform(Y_true.reshape(-1,1))
+        Y_pred = scaler.fit_transform(Y_pred.reshape(-1,1))
+
         # MAE
-        mae = mean_absolute_error(y_true, y_pred)
+        mae = mean_absolute_error(Y_true, Y_pred)
         # MSE
-        mse = mean_squared_error(y_true, y_pred)
+        mse = mean_squared_error(Y_true, Y_pred)
         # RMSE
         rsme = math.sqrt(mse)
         # R2
-        r2 = r2_score(y_true, y_pred)
+        r2 = r2_score(Y_true, Y_pred)
 
         return mae, mse, rsme, r2
 
