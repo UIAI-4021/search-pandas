@@ -64,10 +64,9 @@ class MyML:
         w = w_in.copy()
         b = b_in
 
-
-
+        tmp_num_iters = 20100
         converged = False
-        for i in tqdm(range(num_iters)):
+        for i in tqdm(range(tmp_num_iters), desc='Training', unit='record'):
             if converged:
                 break
 
@@ -94,7 +93,7 @@ class MyML:
         return w, b, J_history
 
     @staticmethod
-    def checking_error(y_true, y_pred):
+    def calculate_error(y_true, y_pred):
         # MAE
         mae = mean_absolute_error(y_true, y_pred)
         # MSE
@@ -104,5 +103,7 @@ class MyML:
         # R2
         r2 = r2_score(y_true, y_pred)
 
-        print(f'MAE: {mae}, MSE: {mse}, RMSE: {rsme}, R2: {r2}')
+        return mae, mse, rsme, r2
+
+        # print(f'MAE: {mae}, MSE: {mse}, RMSE: {rsme}, R2: {r2}')
 
