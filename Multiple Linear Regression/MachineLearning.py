@@ -64,10 +64,9 @@ class MyML:
         w = w_in.copy()
         b = b_in
 
-
-
+        tmp_num_iters = 20100
         converged = False
-        for i in tqdm(range(num_iters)):
+        for i in tqdm(range(tmp_num_iters), desc='Training', unit='record'):
             if converged:
                 break
 
@@ -78,7 +77,6 @@ class MyML:
 
             if i < 100000:
                 J_history.append(MyML.compute_cost(X, y, w, b))
-
             w_history.append(w)
 
             if len(w_history) >= 20000:
@@ -94,15 +92,25 @@ class MyML:
         return w, b, J_history
 
     @staticmethod
-    def checking_error(y_true, y_pred):
+    def calculate_error(y_true, y_pred):
+        Y_true = np.array(copy.copy(y_true))
+        Y_pred = np.array(copy.copy(y_pred))
+
+        scaler = StandardScaler()
+
+        Y_true = scaler.fit_transform(Y_true.reshape(-1,1))
+        Y_pred = scaler.fit_transform(Y_pred.reshape(-1,1))
+
         # MAE
-        mae = mean_absolute_error(y_true, y_pred)
+        mae = mean_absolute_error(Y_true, Y_pred)
         # MSE
-        mse = mean_squared_error(y_true, y_pred)
+        mse = mean_squared_error(Y_true, Y_pred)
         # RMSE
         rsme = math.sqrt(mse)
         # R2
-        r2 = r2_score(y_true, y_pred)
+        r2 = r2_score(Y_true, Y_pred)
 
-        print(f'MAE: {mae}, MSE: {mse}, RMSE: {rsme}, R2: {r2}')
+        return mae, mse, rsme, r2
+
+        # print(f'MAE: {mae}, MSE: {mse}, RMSE: {rsme}, R2: {r2}')
 

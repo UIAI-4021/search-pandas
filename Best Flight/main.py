@@ -12,7 +12,7 @@ Description:
     This project is part of the "Fundamentals and Applications of Artificial Intelligence" course at the University of Isfahan.
 
     Our mission in this project is to tackle the complex challenge of optimizing flight routes across different countries. To do this, we've harnessed a relatively large dataset comprising real flights originating from various airports in different countries, each associated with different pricing and distances.
-
+Ffi
     The primary objective is to identify the most efficient and cost-effective routes for travelers, ensuring that the journeys between countries are both optimal and economical. To achieve this goal, we've explored two key algorithms, Dijkstra and A*, as tools to navigate our extensive flight network.
 
     In addition to these algorithms, we've leveraged essential data structures, including the use of a min-heap, to manage and streamline our graph-based approach.
@@ -22,11 +22,10 @@ Description:
 Usage:
     You can run this script by executing it from the command line, providing necessary arguments and options. Example usage:
 
-    $ python my_project.py [arguments] [options]
+    $ python run_best_flight.py "flight1 - flight2"
 
 Requirements:
     - Python 3.x
-    - "art" library for ASCII art generation
     - "tqbm" library for progress bar support
 
 Contributors:
@@ -75,23 +74,23 @@ try:
 
 except ValueError as e:
     print('\nError:' , e)
-    # exit()
+    exit()
 
 # endregion
 
 dijkstra_start_time = time.time()    #To measure the execution time
 
-dijkstra_entry = graph.dijkstra(graph.get_vertex('Imam Khomeini International Airport'),
-                   graph.get_vertex('Raleigh Durham International Airport'))
-# e = graph.dijkstra(source_vertex, destination_vertex)
+# dijkstra_entry = graph.dijkstra(graph.get_vertex('Imam Khomeini International Airport'),
+#                    graph.get_vertex('Raleigh Durham International Airport'))
+dijkstra_entry = graph.dijkstra(source_vertex, destination_vertex)
 dijkstra_end_time = time.time()
 
 
 a_star_start_time = time.time()    #To measure the execution time
 
-a_star_entry = graph.a_star(graph.get_vertex('Imam Khomeini International Airport'),
-                            graph.get_vertex('Raleigh Durham International Airport'))
-# a_star_entry = graph.dijkstra(source_vertex, destination_vertex)
+# a_star_entry = graph.a_star(graph.get_vertex('Imam Khomeini International Airport'),
+#                             graph.get_vertex('Raleigh Durham International Airport'))
+a_star_entry = graph.dijkstra(source_vertex, destination_vertex)
 a_star_end_time = time.time()
 
 
@@ -99,7 +98,7 @@ a_star_end_time = time.time()
 
 if not os.path.exists('../Best Flight Output'):
     os.mkdir('../Best Flight Output')
-file = open('../Best Flight Output/Dijkstra-Algorithm.txt', 'w', encoding="utf-8")
+file = open('../Best Flight Output/[Pandas]-UIAI4021-PR1-Q1([Dijkstra-Algorithm]).txt', 'w', encoding="utf-8")
 
 
 dijkstra_execution_time = round(dijkstra_end_time - dijkstra_start_time,3)
@@ -174,7 +173,7 @@ file.close()
 
 if not os.path.exists('../Best Flight Output'):
     os.mkdir('../Best Flight Output')
-file = open('../Best Flight Output/A-Star-Algorithm.txt', 'w', encoding="utf-8")
+file = open('../Best Flight Output/[Pandas]-UIAI4021-PR1-Q1([A-Star-Algorithm]).txt', 'w', encoding="utf-8")
 
 
 a_star_execution_time = round(a_star_end_time - a_star_start_time, 3)

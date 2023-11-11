@@ -1,7 +1,5 @@
 import pandas as pd
 from globals import _data_set_path
-from globals import _flight_price_dataset
-from MachineLearning import MyML
 class Flight:
     def __init__(self, Airline, SourceAirport, DestinationAirport
                  , SourceAirport_City, SourceAirport_Country, SourceAirport_Latitude
@@ -53,45 +51,3 @@ class Flight:
         return flights
 
 
-
-
-
-class FlightPrice:
-    def __init__(self , departure_time, stops, arrival_time, flight_class,
-                        duration, days_left, price,
-                        departure_time_mapping,
-                        arrival_time_mapping,
-                        stops_mapping,
-                        class_mapping,
-                 ):
-        self.departure_time = departure_time
-        self.stops = stops
-        self.arrival_time = arrival_time
-        self.flight_class = flight_class
-        self.duration = duration
-        self.days_left = days_left
-        self.price = price
-
-        self.departure_time_mapping = departure_time_mapping
-        self.arrival_time_mapping = arrival_time_mapping
-        self.stops_mapping = stops_mapping
-        self.class_mapping = class_mapping
-
-    @staticmethod
-    def set_df(df):
-        df = df
-    @staticmethod
-    def get_flights_price():
-        df = pd.read_csv(_flight_price_dataset)
-        MyML.label_encode(df)
-        flights_price = list()
-        # for index, record in df.iterrows():
-        #
-        #     f = FlightPrice(record['departure_time'], record['stops'], record['arrival_time'],
-        #                     record['class'], record['duration'],
-        #                     record['days_left'], record['price'],
-        #                     record['departureTimeMapping'], record['arrivalTimeMapping'],
-        #                     record['stopsMapping'], record['classMapping'])
-        #
-        #     flights_price.append(f)
-        return df
