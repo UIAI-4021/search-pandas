@@ -42,13 +42,12 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 from MachineLearning import MyML
-from globals import _flight_price_dataset
 import pandas as pd
 #endregion
 
 # pre-process
 # ==============================
-df = pd.read_csv(_flight_price_dataset)
+df = pd.read_csv('../assets/files/Flight_Price_Dataset.csv')
 MyML.scaler(df)
 df = MyML.label_encode(df)
 X_train, X_test, y_train, y_test = MyML.split(df)
