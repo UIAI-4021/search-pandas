@@ -30,7 +30,7 @@ class Heap:
         self.heap[i] = self.heap[j]
         self.heap[j] = temp
 
-    def upHeap(self, j):
+    def up_heap(self, j):
 
         while j > 0:
             p = self.parent(j)
@@ -39,7 +39,7 @@ class Heap:
             self.swap(j, p)
             j = p
 
-    def downHeap(self, j):
+    def down_heap(self, j):
 
         while self.hasLeft(j) :
             left_index = self.left(j)
@@ -63,7 +63,7 @@ class Heap:
 
         self.swap(0, len(self.heap)-1)
         self.heap.pop()
-        self.downHeap(0)
+        self.down_heap(0)
 
         return answer
 
@@ -71,7 +71,7 @@ class Heap:
     def inster(self , key, value1: list, value2: VertexClass):
         newest = Entry(key, value1, value2)
         self.heap.append(newest)
-        self.upHeap(len(self.heap)-1)
+        self.up_heap(len(self.heap) - 1)
 
         return newest
 
