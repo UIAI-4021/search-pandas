@@ -139,13 +139,16 @@ class Graph:
 
 
     def calculate_heuristic(self, current: VertexClass , destination: VertexClass):
+
+
         current_position_vector = np.array([current.x_axis, current.y_axis, current.z_axis])
         destinaion_position_vector = np.array([current.x_axis, current.y_axis, current.z_axis])
 
-        current_position_norm = math.sqrt(np.dot(current_position_vector , current_position_vector))
-        destination_position_norm = math.sqrt(np.dot(destinaion_position_vector , destinaion_position_vector))
+        diff = current_position_vector - destinaion_position_vector
 
-        return abs(current_position_norm - destination_position_norm)
+        norm = math.sqrt(np.dot(diff , diff))
+
+        return abs(norm)
 
     def a_star(self, origin: VertexClass, destination: VertexClass):
 
