@@ -28,8 +28,8 @@ class Flight:
     def get_cost(record):
         # cost = 6 * record['Price'] + 3 * record['FlyTime'] + record['Distance']   #kianoosh`s way
         primary_pow = 10 ** 3
-        cost = record['Distance'] * primary_pow + record['FlyTime'] * primary_pow * (10 ** 2) + \
-               record['Price'] * primary_pow * (10 ** 2) * (10 ** 3)  # melika`s way
+        cost = record['Distance'] + record['FlyTime'] * primary_pow + \
+               record['Price'] * primary_pow * (10 ** 2)  # melika`s way
         return cost
 
     @staticmethod

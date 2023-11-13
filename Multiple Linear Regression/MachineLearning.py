@@ -79,14 +79,10 @@ class MyML:
                 J_history.append(MyML.compute_cost(X, y, w, b))
             w_history.append(w)
 
-            if len(w_history) >= 20000:
-                for j in range(len(w_history)-1, len(w_history)-100, -1):
-                    if np.allclose(w_history[-1], w_history[j], atol=1e-10000):
-                        continue
-                    else:
-                        break
-                else:
-                    converged = True
+            converged_tmp = J_history[-1]
+
+            if len(J_history) >= 10000 and all(abs(converged_tmp - J) < 10000 for J in J_history[-2:-101:-1]):
+                converged = True
 
 
         return w, b, J_history
